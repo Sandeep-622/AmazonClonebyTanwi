@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { addToCart, addToFavorite } from "@/store/nextSlice";
 
 
-const Products = ({productData} : any) =>{
+const Products = ({productData} : {productData: ProductProps[]}) =>{
     const dispatch = useDispatch();
     return(
         <div className="w-full px-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">

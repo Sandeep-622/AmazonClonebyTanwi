@@ -15,13 +15,13 @@ import {
   // Create a noop storage for SSR
   const createNoopStorage = () => {
     return {
-      getItem(_key: any) {
+      getItem() {
         return Promise.resolve(null)
       },
-      setItem(_key: any, value: any) {
+      setItem(_key: string, value: unknown) {
         return Promise.resolve(value)
       },
-      removeItem(_key: any) {
+      removeItem() {
         return Promise.resolve()
       },
     }
@@ -48,7 +48,7 @@ export const store = configureStore({
       }),
 });
 
-export let persistor = persistStore(store)
+export const persistor = persistStore(store)
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>

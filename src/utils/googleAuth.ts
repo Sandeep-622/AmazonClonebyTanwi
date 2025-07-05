@@ -1,7 +1,18 @@
 // Google OAuth helper functions
 import { google } from 'googleapis';
 
-const redirectUri = 'http://localhost:3000/api/auth/callback/google';
+// Dynamic redirect URI based on environment
+const getRedirectUri = () => {
+  if (process.env.NODE_ENV === 'production') {
+    // Replace with your actual production domain
+    return process.env.NEXTAUTH_URL 
+      ? `${process.env.NEXTAUTH_URL}/api/auth/callback/google`
+      : 'https://yourdomain.com/api/auth/callback/google';
+  }
+  return 'http://localhost:3000/api/auth/callback/google';
+};
+
+const redirectUri = getRedirectUri();
 console.log('OAuth2 Client initialized with redirect URI:', redirectUri);
 
 const oauth2Client = new google.auth.OAuth2(

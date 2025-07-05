@@ -10,14 +10,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     }
 
     try {
-      const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET!) as any;
+      const decoded = jwt.verify(token, process.env.NEXTAUTH_SECRET!) as {
+        id: string;
+        email: string;
+        name: string;
+        picture: string;
+      };
       res.status(200).json({
         id: decoded.id,
         email: decoded.email,
         name: decoded.name,
         image: decoded.picture,
       });
-    } catch (error) {
+    } catch {
       res.status(401).json({ message: 'Invalid token' });
     }
   } else {

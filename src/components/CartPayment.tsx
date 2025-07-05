@@ -6,7 +6,7 @@ import FormattedPrice from "./FormattedPrice";
 
 
 const CartPayment=()=>{
-    const{productData,userInfo}=useSelector((state:stateProps)=>state.next);
+    const{productData}=useSelector((state:stateProps)=>state.next);
     const[totalAmount,setTotalAmount]=useState(0);
     useEffect(()=>{
         let amount=0;

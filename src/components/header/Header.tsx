@@ -47,7 +47,7 @@ const Header = () => {
                 } else {
                     dispatch(removeUser());
                 }
-            } catch (error) {
+            } catch {
                 dispatch(removeUser());
             }
         };

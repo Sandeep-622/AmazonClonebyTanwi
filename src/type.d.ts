@@ -30,6 +30,10 @@ export interface stateProps{
         email: string;
         image: string;
     };
-    next: any;
+    next: {
+        productData: StoreProduct[];
+        favoriteData: StoreProduct[];
+        userInfo: UserInfo | null;
+    };
 
 }

@@ -48,7 +48,9 @@ export const nextSlice = createSlice({
             const existingProduct = state.productData.find(
                 (item: StoreProduct) => item.id === action.payload.id
             );
-            existingProduct && existingProduct.quantity++;
+            if (existingProduct) {
+                existingProduct.quantity++;
+            }
         },
         decreaseQuantity:(state,action) =>{
             const existingProduct = state.productData.find(
@@ -56,8 +58,8 @@ export const nextSlice = createSlice({
             );
             if(existingProduct?.quantity === 1){
                 existingProduct.quantity = 1;
-            }else{
-                existingProduct!.quantity --;
+            }else if(existingProduct){
+                existingProduct.quantity --;
             }
         },
         deleteProduct:(state,action) => {
