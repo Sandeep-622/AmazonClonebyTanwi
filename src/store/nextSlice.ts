@@ -5,7 +5,11 @@ interface NextState{
     productData: StoreProduct[],
     favoriteData:StoreProduct[],
     allProducts:StoreProduct[],
-    userInfo: null | string;
+    userInfo: null | {
+        name: string;
+        email: string;
+        image: string;
+    };
 }
 
 const initialState:NextState = {

@@ -26,8 +26,7 @@ const Products = ({productData} : any) =>{
                         <div className="w-12 h-12 absolute bottom-20 right-0 border-[1px] 
                         border-gray-400 bg-white rounded-md flex flex-col translate-x-20 group-hover:translate-x-0
                         transition-transform duration-300">
-                            <span onClick={() => dispatch(
-                                addToCart({
+                            <span onClick={() => dispatch(addToCart({
                                     id : id,
                                     title:title,
                                     price:price,
@@ -35,8 +34,7 @@ const Products = ({productData} : any) =>{
                                     category:category,
                                     image:image,
                                     quantity:1,
-                            })
-                        )} className="w-full h-full border-b-[1px] border-b-gray-400 flex items-center justify-center 
+                                }))} className="w-full h-full border-b-[1px] border-b-gray-400 flex items-center justify-center 
                             text-xl bg-transparent hover:bg-amazon_yellow cursor-pointer duration-300
                             "><HiShoppingCart/></span>
                             <span onClick={() => dispatch(

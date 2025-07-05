@@ -6,30 +6,54 @@ import { BiCaretDown } from "react-icons/bi";
 import { HiOutlineSearch } from "react-icons/hi";
 import { CiLocationOn } from "react-icons/ci";
 import Link from "next/link";
-import { useDispatch, UseDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { stateProps } from "@/type";
-import { useSession,signIn,signOut} from "next-auth/react";
-import { addUser } from "@/store/nextSlice";
+import { addUser, removeUser } from "@/store/nextSlice";
 
 
 const Header = () => {
-    const dispatch=useDispatch();
-    const {productData,favoriteData, userInfo} = useSelector(
-        (state:stateProps)=>state.next);
-        const{data:session}=useSession();
-        console.log(userInfo)
-        useEffect(()=>{
-           if(session)
-        {
-          dispatch(addUser({
-            name:session?.user?.name,
-                email:session?.user?.email,
-                image:session?.user?.image,
+    const dispatch = useDispatch();
+    const { productData, favoriteData, userInfo } = useSelector(
+        (state: stateProps) => state.next
+    );
 
+    // Custom authentication functions
+    const signIn = () => {
+        window.location.href = '/api/auth/google/login';
+    };
 
-          })
-        )};
-        },[session]);
+    const signOut = async () => {
+        try {
+            await fetch('/api/auth/logout', { method: 'POST' });
+            dispatch(removeUser());
+            window.location.reload();
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
+
+    // Check if user is authenticated on component mount
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await fetch('/api/auth/user');
+                if (response.ok) {
+                    const userData = await response.json();
+                    dispatch(addUser({
+                        name: userData.name || "",
+                        email: userData.email || "",
+                        image: userData.image || "",
+                    }));
+                } else {
+                    dispatch(removeUser());
+                }
+            } catch (error) {
+                dispatch(removeUser());
+            }
+        };
+
+        checkAuth();
+    }, [dispatch]);
        
 
 
@@ -39,11 +63,11 @@ const Header = () => {
     <div className="w-full h-20 bg-amazon_blue  text-lightText sticky top-0 z-50">
      <div className="h-full w-full mx-auto inline-flex items-center justify-between gap-1 mdl:gap-3 px-4">
     {/*Logo*/}
-       <Link href={"/"}className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 items-center justify-center h-[70%]">
+       <Link href={"/"} className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 flex items-center justify-center h-[70%]">
         <Image className="w-28 object-cover" src={logo} alt="logoImg"/>
         </Link>
     {/*delivery*/}
-      <div className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 items-center justify-center h-[70%]">
+      <div className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 flex items-center justify-center h-[70%] gap-1">
         <CiLocationOn/>
         <div className="text-xs">
           <p>Deliver to</p>
@@ -64,33 +88,51 @@ const Header = () => {
       </div>
       {/*signin*/}
       {/* Sign-in Section */}
-      <div className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 items-center justify-center h-[70%]">
-        <p>Hello SignIn</p>
-        <p className="text-white fon.t-bold flex item-center">Accounts & Lists{" "}
-          <span><BiCaretDown/></span></p>
+      <div 
+        onClick={() => userInfo ? signOut() : signIn()}
+        className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 flex items-center justify-center h-[70%] gap-1"
+      >
+        {userInfo && userInfo.image && (
+          <Image 
+            src={userInfo.image} 
+            alt="User avatar" 
+            width={25} 
+            height={25} 
+            className="rounded-full"
+          />
+        )}
+        <div>
+          <p className="text-xs">Hello, {userInfo ? userInfo.name : "Sign in"}</p>
+          <p className="text-white font-bold flex items-center text-sm">
+            {userInfo ? "Sign out" : "Account & Lists"}{" "}
+            <span><BiCaretDown/></span>
+          </p>
+        </div>
       </div>
 
       {/*favourite*/}
-      <div className="px-2 border border-transparent hover:border-white cursor-pointer duration-300 items-center justify-center h-[70%] relative">
-        <p>Marked</p>
-        <p className="text-white font-bold">&Favourites</p>
-        {
-          favoriteData.length > 0 && (
-                        <span className="absolute right-2 top-2 w-4 h-4
-                        border-[1px] border-gray-400 flex items-center justify-center text-xs
-                        text-amazon_yellow">{favoriteData.length}</span>
-                    )
-
-        }
+      <div className="px-3 border border-transparent hover:border-white cursor-pointer duration-300 flex items-center justify-center h-[70%] relative min-w-[90px]">
+        <div>
+          <p className="text-xs">Marked</p>
+          <p className="text-white font-bold text-sm">&Favourites</p>
         </div>
-        {/*cart*/}
-        <Link href={"/cart"} className="flex items-center px-2 border border-transparent hover:border-white cursor-pointer duration-300 items-center justify-center h-[70%] relative">
-          <Image className="w-auto object-cover" src={cartIcon} alt="cartImg"/>
-          <p className="text-ml text-white font-bold mt-3">Cart</p>
-          <span className="absolute text-amazon_yellow text-sm top-2 left-[30px] font-bold">
-           {productData ? productData.length : 0}
-
+        {favoriteData.length > 0 && (
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-amazon_yellow text-black text-xs font-bold rounded-full flex items-center justify-center">
+            {favoriteData.length}
           </span>
+        )}
+      </div>
+        {/*cart*/}
+        <Link href={"/cart"} className="flex items-center px-3 border border-transparent hover:border-white cursor-pointer duration-300 justify-center h-[70%] relative min-w-[80px]">
+          <div className="relative mr-2">
+            <Image className="w-10 h-10 object-contain" src={cartIcon} alt="cartImg"/>
+            {productData && productData.length > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-amazon_yellow text-black text-xs font-bold rounded-full flex items-center justify-center">
+                {productData.length}
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-white font-bold">Cart</p>
         </Link>
 
 

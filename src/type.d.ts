@@ -22,10 +22,14 @@ export interface StoreProduct{
 }
 
 export interface stateProps{
-    productData: [];
-    favoriteData: [];
-    userInfo: [];
-    userInfo: null | string;
+    productData: StoreProduct[];
+    favoriteData: StoreProduct[];
+    allProducts: StoreProduct[];
+    userInfo: null | {
+        name: string;
+        email: string;
+        image: string;
+    };
     next: any;
 
 }

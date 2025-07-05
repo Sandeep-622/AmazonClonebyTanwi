@@ -4,14 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:https": "next dev & local-ssl-proxy --source 3001 --target 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
+    "@types/jsonwebtoken": "^9.0.10",
+    "googleapis": "^150.0.1",
+    "jsonwebtoken": "^9.0.2",
     "next": "15.3.4",
-    "next-auth": "^5.0.0-beta.29",
     "razorpay": "^2.9.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -29,6 +32,8 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
+    "local-ssl-proxy": "^2.0.5",
+    "mkcert": "^3.2.0",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.11",
     "tailwindcss-config": "^1.0.0",

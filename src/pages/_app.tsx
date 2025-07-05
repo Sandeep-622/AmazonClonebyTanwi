@@ -3,25 +3,21 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Provider } from "react-redux";
-import { store,persistor } from "@/store/store";
+import { store, persistor } from "@/store/store";
 import { PersistGate } from "redux-persist/integration/react";
-import { SessionProvider } from "next-auth/react";
 
-export default function App({ Component, pageProps:{session,...pageProps} }: AppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   return (
-  <div> 
+    <div>
       <Provider store={store}>
         <PersistGate persistor={persistor} loading={null}>
-          <SessionProvider session={session} >
-      <div className="bg-gray-300"><RootLayout>
-        <Component{...pageProps} /> 
-        </RootLayout>
-        </div>
-        </SessionProvider>
+          <div className="bg-gray-300">
+            <RootLayout>
+              <Component {...pageProps} />
+            </RootLayout>
+          </div>
         </PersistGate>
       </Provider>
-    
-   
-  </div>
+    </div>
   );
 }

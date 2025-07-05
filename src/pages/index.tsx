@@ -24,7 +24,6 @@ export default function Home({productData} : Props) {
   console.log(productData)
   return (
     <main>
-      
       <div>
         <Banner/>
         <Products productData={productData}/>
